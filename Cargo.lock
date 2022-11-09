@@ -227,7 +227,7 @@ dependencies = [
 
 [[package]]
 name = "aleph-node"
-version = "0.8.0"
+version = "0.8.0-mainnet"
 dependencies = [
  "aleph-runtime",
  "clap",
@@ -280,7 +280,7 @@ dependencies = [
 
 [[package]]
 name = "aleph-runtime"
-version = "0.8.0"
+version = "0.8.0-mainnet"
 dependencies = [
  "frame-executive",
  "frame-support",
