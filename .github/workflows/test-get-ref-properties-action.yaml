@@ -13,9 +13,11 @@ jobs:
       - name: GIT | Checkout source code
         uses: actions/checkout@v2
 
-      - name: Test action get-ref-properties
+      - name: Call action get-ref-properties
         id: get-ref-properties
         uses: ./.github/actions/get-ref-properties
+
+      - name: Test action get-ref-properties
         run: |
           echo ${{ steps.get-ref-properties.outputs.branch }}
           echo ${{ steps.get-ref-properties.outputs.branch_name_flattened }}
