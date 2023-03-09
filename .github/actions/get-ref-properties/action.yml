@@ -31,24 +31,14 @@ runs:
       run: |
         echo name=$(echo ${HEAD_REF#refs/tags/}) >> $GITHUB_OUTPUT
 
-    - name: Get branch properties if pull request
+    - name: Get branch properties if commit was pushed to a pull request or a branch
       id: branch
-      if: startsWith(github.ref, 'refs/pull/')
+      if: startsWith(github.ref, 'refs/pull/') || startsWith(github.ref, 'refs/heads/')
       shell: bash
       env:
         # notice pull requests needs special logic
         # see https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
-        HEAD_REF: ${{ github.head_ref }}
-      run: |
-        echo name=$(echo ${HEAD_REF#refs/heads/}) >> $GITHUB_OUTPUT
-        echo name_flattened=$(echo ${HEAD_REF#refs/heads/} | tr / -) >> $GITHUB_OUTPUT
-
-    - name: Get branch properties if a commit was pushed to a branch
-      id: branch
-      if: startsWith(github.ref, 'refs/heads/')
-      shell: bash
-      env:
-        HEAD_REF: ${{ github.ref }}
+        HEAD_REF: ${{ github.head_ref || github.ref  }}
       run: |
         echo name=$(echo ${HEAD_REF#refs/heads/}) >> $GITHUB_OUTPUT
         echo name_flattened=$(echo ${HEAD_REF#refs/heads/} | tr / -) >> $GITHUB_OUTPUT
