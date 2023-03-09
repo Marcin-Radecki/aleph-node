@@ -27,7 +27,7 @@ runs:
       if: startsWith(github.ref, 'refs/tags/')
       shell: bash
       env:
-        HEAD_REF: ${{ github_ref }}
+        HEAD_REF: ${{ github.ref }}
       run: |
         echo name=$(echo ${HEAD_REF#refs/tags/}) >> $GITHUB_OUTPUT
 

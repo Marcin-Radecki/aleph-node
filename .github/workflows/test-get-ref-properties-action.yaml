@@ -6,8 +6,8 @@ on:
   push:
 
 jobs:
-  build-aleph-client-docs:
-    name: Build docs
+  main:
+    name: Test action get-ref-properties
     runs-on: ubuntu-latest
     steps:
       - name: GIT | Checkout source code
