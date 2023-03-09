@@ -19,6 +19,7 @@ jobs:
 
       - name: Test action get-ref-properties
         run: |
+          echo ${{ steps.get-ref-properties.outputs.ref }}
           echo ${{ steps.get-ref-properties.outputs.branch }}
           echo ${{ steps.get-ref-properties.outputs.branch_name_flattened }}
           echo ${{ steps.get-ref-properties.outputs.tag }}

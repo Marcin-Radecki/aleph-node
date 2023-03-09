@@ -18,6 +18,10 @@ outputs:
   sha:
     description: Unique commit SHA
     value: ${{ steps.commit.outputs.sha }}
+  ref:
+    description: Github context var for debug purposes
+    value: ${{ steps.branch.outputs.ref }}
+
 
 runs:
   using: composite
@@ -27,9 +31,9 @@ runs:
       if: startsWith(github.ref, 'refs/tags/')
       shell: bash
       env:
-        HEAD_REF: ${{ github.ref }}
+        REF: ${{ github.ref }}
       run: |
-        echo name=$(echo ${HEAD_REF#refs/tags/}) >> $GITHUB_OUTPUT
+        echo name=$(echo ${REF#refs/tags/}) >> $GITHUB_OUTPUT
 
     - name: Get branch properties if commit was pushed to a pull request or a branch
       id: branch
@@ -42,6 +46,7 @@ runs:
       run: |
         echo name=$(echo ${HEAD_REF#refs/heads/}) >> $GITHUB_OUTPUT
         echo name_flattened=$(echo ${HEAD_REF#refs/heads/} | tr / -) >> $GITHUB_OUTPUT
+        echo ref=$(echo ${HEAD_REF}) >> $GITHUB_OUTPUT
 
     - name: Get commit properties
       id: commit
