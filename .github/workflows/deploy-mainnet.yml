@@ -26,6 +26,6 @@ jobs:
       - name: Test get-ref-properties
         shell: bash
         run: |
-          echo "branch = ${{ steps.get-ref-properties.outputs.branch }}"
+          echo "tag = ${{ steps.get-ref-properties.outputs.tag }}"
           echo "sha = ${{ steps.get-ref-properties.outputs.sha }}"
 
