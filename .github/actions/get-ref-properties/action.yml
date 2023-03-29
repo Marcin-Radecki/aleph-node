@@ -49,6 +49,7 @@ runs:
           | tr / - | tr '[:upper:]' '[:lower:]' | tr -c '[a-z0-9-.]' '-') >> $GITHUB_OUTPUT
 
     - name: Get branch name if release or pre-release was createed
+      if: !startsWith(github.ref, 'refs/')
       id: release
       shell: bash
       run: |
