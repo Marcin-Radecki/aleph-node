@@ -1,0 +1,55 @@
+---
+name: Get docker image names
+description:
+  Returns
+    1) public ECR image names for release candidate image and deploy image
+    2) public DockerHub image names for Testnet and Mainnet
+  based on the current git HEAD. This action is intended to run only when tag was source of
+  trigger (ie tag push)
+outputs:
+  ecr-rc-image:
+    description: ECR release candidate image name
+    value: ${{ steps.get-docker-image-names.outputs.ecr-rc-image }}
+  ecr-deploy-image:
+    description: ECR deploy image name
+    value: ${{ steps.get-docker-image-names.outputs.ecr-deploy-image }}
+  dockerhub-testnet-image:
+    description: DockerHub Testnet docker image name
+    value: ${{ steps.get-docker-image-names.outputs.dockerhub-testnet-image }}
+  dockerhub-mainnet-image:
+    description: DockerHub Mainnet docker image name
+    value: ${{ steps.get-docker-image-names.outputs.dockerhub-mainnet-image }}
+  dockerhub-testnet-latest-image:
+    description: DockerHub Testnet docker image name
+    value: ${{ steps.get-docker-image-names.outputs.dockerhub-testnet-latest-image }}
+  dockerhub-mainnet-latest-image:
+    description: DockerHub Mainnet docker image name
+    value: ${{ steps.get-docker-image-names.outputs.dockerhub-mainnet-latest-image }}
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+
+    - name: Call action get-ref-properties
+      id: get-ref-properties
+      uses: ./.github/actions/get-ref-properties
+
+    - name: Get node image names
+      id: get-docker-image-names
+      shell: bash
+      run: |
+        commit_sha=${{ steps.get-ref-properties.outputs.sha }}
+        commit_tag=${{ steps.get-ref-properties.outputs.tag }}
+        ecr=${{ vars.ECR_PUBLIC_REGISTRY }}
+        echo "ecr-rc-image=${ecr}aleph-node:${commit_sha}" >> $GITHUB_OUTPUT
+        echo "ecr-deploy-image=${ecr}aleph-node:${commit_sha}" >> $GITHUB_OUTPUT
+        echo "dockerhub-testnet-image=cardinalcryptography/aleph-zero:testnet-${commit_tag}" \
+          >> $GITHUB_OUTPUT
+        echo "dockerhub-mainnet-image=cardinalcryptography/aleph-zero:mainnet-${commit_tag}" \
+          >> $GITHUB_OUTPUT
+        echo "dockerhub-testnet-latest-image=cardinalcryptography/aleph-zero:testnet-latest" \
+          >> $GITHUB_OUTPUT
+        echo "dockerhub-mainnet-latest-image=cardinalcryptography/aleph-zero:mainnet-latest" \
+          >> $GITHUB_OUTPUT
