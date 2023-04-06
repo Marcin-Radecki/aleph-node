@@ -19,7 +19,7 @@ jobs:
     secrets: inherit
 
   push-ecr-image:
-    needs: [check-vars-and-secrets]
+    # needs: [check-vars-and-secrets]
     runs-on: ubuntu-20.04
     steps:
       - name: Call action get-ref-properties
@@ -62,7 +62,7 @@ jobs:
 
           docker pull ${rc_image}
           docker tag ${rc_image} ${deploy_image}
-          docker push ${deploy_image}
+          # docker push ${deploy_image}
 
   push-dockerhub-image:
     needs: [push-ecr-image]
@@ -80,7 +80,6 @@ jobs:
             ${{ vars.ECR_PUBLIC_REGISTRY }}aleph-node:${{ steps.get-ref-properties.outputs.tag }}
           target-image:
             cardinalcryptography/aleph-zero:testnet-${{ steps.get-ref-properties.outputs.tag }}
-          additional-image: cardinalcryptography/aleph-zero:testnet-latest
           dockerhub-username: "${{ secrets.DOCKERHUB_USERNAME }}"
           dockerhub-password: "${{ secrets.DOCKERHUB_PASSWORD }}"
           push: 'true'
