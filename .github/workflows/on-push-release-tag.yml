@@ -20,11 +20,13 @@ jobs:
 
   push-ecr-image:
     # needs: [check-vars-and-secrets]
+    if: startsWith(github.ref, 'refs/heads/') &&
+      (github.ref_name == 'main' || startsWith(github.ref_name, 'release-'))
     runs-on: ubuntu-20.04
     steps:
       - name: GIT | Checkout source code
         uses: actions/checkout@v3
-        
+
       - name: Call action get-ref-properties
         id: get-ref-properties
         uses: ./.github/actions/get-ref-properties
