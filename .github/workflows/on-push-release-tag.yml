@@ -3,25 +3,17 @@ name: Push release candidate image of aleph-node to ECR and DockerHub
 
 on:
   push:
-    branches:
-      - main
-      - 'release-*'
     tags:
       - 'r-*'
 
 jobs:
   check-vars-and-secrets:
     name: Check vars and secrets
-    # due to the fact on push and tags trigger is OR, we need to check AND here
-    if: startsWith(github.ref, 'refs/heads/') &&
-      (github.ref_name == 'main' || startsWith(github.ref_name, 'release-'))
     uses: ./.github/workflows/_check-vars-and-secrets.yml
     secrets: inherit
 
   push-ecr-image:
     # needs: [check-vars-and-secrets]
-    if: startsWith(github.ref, 'refs/heads/') &&
-      (github.ref_name == 'main' || startsWith(github.ref_name, 'release-'))
     runs-on: ubuntu-20.04
     steps:
       - name: GIT | Checkout source code
