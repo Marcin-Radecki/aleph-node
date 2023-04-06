@@ -39,10 +39,11 @@ jobs:
         shell: bash
         run: |
           rc_image=${{ steps.get-node-image-names.outputs.rc-image }}
-          docker manifest inspect $rc_image
           image_not_exist=$(docker manifest inspect $rc_image &> /dev/null ; echo $?)
           if [[ $image_not_exist -eq 1 ]]; then
             echo "::error title=Wrong docker image tag::Docker image ${rc_image} doesn't exist"
+            echo "You might have tagged not release or main branch, or after merge to main"
+            echo "workflow have not finished yet."
             exit 1
           fi
 
@@ -62,7 +63,7 @@ jobs:
 
           docker pull ${rc_image}
           docker tag ${rc_image} ${deploy_image}
-          # docker push ${deploy_image}
+          docker push ${deploy_image}
 
   push-dockerhub-image:
     needs: [push-ecr-image]
