@@ -41,6 +41,8 @@ jobs:
           username: ${{ secrets.AWS_MAINNET_ACCESS_KEY_ID }}
           password: ${{ secrets.AWS_MAINNET_SECRET_ACCESS_KEY }}
 
+      # if r-* tag was pusshed on a commit that is not on main or release branch, below step would
+      # fail
       - name: Check RC image existence in ECR
         shell: bash
         run: |
