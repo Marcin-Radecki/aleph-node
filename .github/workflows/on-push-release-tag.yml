@@ -1,0 +1,86 @@
+---
+name: Push release candidate image of aleph-node to ECR and DockerHub
+
+on:
+  push:
+    branches:
+      - main
+      - 'release-*'
+    tags:
+      - 'r-*'
+
+jobs:
+  check-vars-and-secrets:
+    name: Check vars and secrets
+    # due to the fact on push and tags trigger is OR, we need to check AND here
+    if: startsWith(github.ref, 'refs/heads/') &&
+      (github.ref_name == 'main' || startsWith(github.ref_name, 'release-'))
+    uses: ./.github/workflows/_check-vars-and-secrets.yml
+    secrets: inherit
+
+  push-ecr-image:
+    needs: [check-vars-and-secrets]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Call action get-ref-properties
+        id: get-ref-properties
+        uses: ./.github/actions/get-ref-properties
+
+      - name: Get node image names
+        id: get-node-image-names
+        shell: bash
+        run: |
+          commit_sha=${{ steps.get-ref-properties.outputs.sha }}
+          commit_tag=${{ steps.get-ref-properties.outputs.tag }}
+          ecr=${{ vars.ECR_PUBLIC_REGISTRY }}
+          echo "rc-image=${ecr}aleph-node:${commit_sha}" >> $GITHUB_OUTPUT
+          echo "deploy-image=${ecr}aleph-node:${commit_sha}" >> $GITHUB_OUTPUT
+
+      - name: Login to Public Amazon ECR
+        id: login-public-ecr
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ vars.ECR_PUBLIC_HOST }}
+          username: ${{ secrets.AWS_MAINNET_ACCESS_KEY_ID }}
+          password: ${{ secrets.AWS_MAINNET_SECRET_ACCESS_KEY }}
+
+      - name: Check RC image existence in ECR
+        shell: bash
+        run: |
+          rc_image=${{ steps.get-node-image-names.outputs.rc-image }}
+          image_not_exist=$(docker manifest inspect $rc_image &> /dev/null ; echo $?)
+          if [[ $image_not_exist -eq 1 ]]; then
+            echo "::error title=Wrong docker image tag::Docker image ${rc_image} doesn't exist"
+            exit 1
+          fi
+
+      - name: Tag and push image to ECR
+        shell: bash
+        run: |
+          rc_image=${{ steps.get-node-image-names.outputs.rc-image }}
+          deploy_image=${{ steps.get-node-image-names.outputs.deploy-image }}
+
+          docker pull ${rc_image}
+          docker tag ${rc_image} ${deploy_image}
+          docker push ${deploy_image}
+
+  push-dockerhub-image:
+    needs: [push-ecr-image]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Call action get-ref-properties
+        id: get-ref-properties
+        uses: ./.github/actions/get-ref-properties
+
+      - name: Build and push Docker Hub image
+        uses: ./.github/actions/build-and-push-dockerhub-image
+        if: secrets.DOCKERHUB_USERNAME != "" && secrets.DOCKERHUB_PASSWORD != ""
+        with:
+          source-image:
+            ${{ vars.ECR_PUBLIC_REGISTRY }}aleph-node:${{ steps.get-ref-properties.outputs.tag }}
+          target-image:
+            cardinalcryptography/aleph-zero:testnet-${{ steps.get-ref-properties.outputs.tag }}
+          additional-image: cardinalcryptography/aleph-zero:testnet-latest
+          dockerhub-username: "${{ secrets.DOCKERHUB_USERNAME }}"
+          dockerhub-password: "${{ secrets.DOCKERHUB_PASSWORD }}"
+          push: 'true'
