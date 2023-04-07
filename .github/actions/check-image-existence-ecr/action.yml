@@ -13,7 +13,7 @@ runs:
     - name: Check docker image existence in ECR
       shell: bash
       run: |
-        ecr-image=${{ inputs.ecr-image }}
+        ecr-image="${{ inputs.ecr-image }}"
         image_not_exist=$(docker manifest inspect ${{ inputs.ecr-image }} &> /dev/null ; echo $?)
         if [[ $image_not_exist -eq 1 ]]; then
           echo "Error: docker image ${{ inputs.ecr-image }} doesn't exist"
