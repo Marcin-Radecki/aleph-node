@@ -31,7 +31,8 @@ jobs:
       - name: Check release candaidate docker image existence
         uses: ./.github/actions/check-image-existence-ecr
         with:
-          ecr-image: ${{ steps.get-docker-image-names.outputs.ecr-rc-image }}
+        #  ecr-image: ${{ steps.get-docker-image-names.outputs.ecr-rc-image }}
+          ecr-image: ${{ steps.get-docker-image-names.outputs.dockerhub-testnet-latest-image }}
 
       - name: Login to Public Amazon ECR
         id: login-public-ecr
