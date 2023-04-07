@@ -13,10 +13,10 @@ jobs:
     secrets: inherit
 
   push-ecr-image:
-    # needs: [check-vars-and-secrets]
+    needs: [check-vars-and-secrets]
     runs-on: ubuntu-20.04
     steps:
-      - name: GIT | Checkout source code
+      - name: Checkout source code
         uses: actions/checkout@v3
 
       - name: Call action get-ref-properties
@@ -33,8 +33,9 @@ jobs:
           echo "rc-image=${ecr}aleph-node:${commit_sha}" >> $GITHUB_OUTPUT
           echo "deploy-image=${ecr}aleph-node:${commit_sha}" >> $GITHUB_OUTPUT
 
-      # if r-* tag was pusshed on a commit that is not on main or release branch, below step would
-      # fail
+      # if r-* tag was pushed on a commit that is not on main or release branch, below step would
+      # fail, as there would be no aleph-node-<sha> image on ECR for <sha> that is not on main
+      # or release branch
       - name: Check RC image existence in ECR
         shell: bash
         run: |
@@ -65,24 +66,19 @@ jobs:
           docker tag ${rc_image} ${deploy_image}
           docker push ${deploy_image}
 
-  push-dockerhub-image:
-    needs: [push-ecr-image]
+  slack:
+    name: Slack notification
     runs-on: ubuntu-20.04
+    needs: [push-ecr-image]
+    if: always()
     steps:
-      - name: GIT | Checkout source code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Call action get-ref-properties
-        id: get-ref-properties
-        uses: ./.github/actions/get-ref-properties
-
-      - name: Build and push Docker Hub image
-        uses: ./.github/actions/build-and-push-dockerhub-image
+      - name: Send Slack message
+        uses: ./.github/actions/slack-notification
         with:
-          source-image:
-            ${{ vars.ECR_PUBLIC_REGISTRY }}aleph-node:${{ steps.get-ref-properties.outputs.tag }}
-          target-image:
-            cardinalcryptography/aleph-zero:testnet-${{ steps.get-ref-properties.outputs.tag }}
-          dockerhub-username: "${{ secrets.DOCKERHUB_USERNAME }}"
-          dockerhub-password: "${{ secrets.DOCKERHUB_PASSWORD }}"
-          push: 'true'
+          notify-on: "failure"
+        env:
+          # TODO change it in next PR to SLACK_WEBHOOK_DEV_ONDUTY
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_TEMP_GRAFANA_NOTIFICATIONS }}
