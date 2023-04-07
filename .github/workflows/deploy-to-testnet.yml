@@ -30,6 +30,8 @@ jobs:
       - name: Get docker image names
         id: get-docker-image-names
         uses: ./.github/actions/get-docker-image-names
+        with:
+          ecr-registry: ${{ vars.ECR_PUBLIC_REGISTRY }}
 
       - name: Build and push Docker Hub image for Testnet
         uses: ./.github/actions/build-and-push-dockerhub-image

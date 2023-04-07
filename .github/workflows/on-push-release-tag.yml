@@ -18,10 +18,12 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
-        
+
       - name: Get docker image names
         id: get-docker-image-names
         uses: ./.github/actions/get-docker-image-names
+        with:
+          ecr-registry: ${{ vars.ECR_PUBLIC_REGISTRY }}
 
       # if r-* tag was pushed on a commit that is not on main or release branch, below step would
       # fail, as there would be no aleph-node-<sha> image on ECR for <sha> that is not on main

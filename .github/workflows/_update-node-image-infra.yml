@@ -23,6 +23,8 @@ jobs:
       - name: Call action Get ECR image names
         id: get-docker-image-names
         uses: ./.github/actions/get-docker-image-names
+        with:
+          ecr-registry: ${{ vars.ECR_PUBLIC_REGISTRY }}
 
       # this step checks indirectly as well that git HEAD has an r-* tag
       # otherwise ECR image would not exist

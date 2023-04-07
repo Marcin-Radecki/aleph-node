@@ -6,6 +6,10 @@ description:
     2) public DockerHub image names for Testnet and Mainnet
   based on the current git HEAD. This action is intended to run only when tag was source of
   trigger (ie tag push)
+inputs:
+  ecr-registry:
+    required: true
+    description: URL to public aleph-node registry in ECR
 outputs:
   ecr-rc-image:
     description: ECR release candidate image name
@@ -42,7 +46,7 @@ runs:
       run: |
         commit_sha=${{ steps.get-ref-properties.outputs.sha }}
         commit_tag=${{ steps.get-ref-properties.outputs.tag }}
-        ecr=${{ vars.ECR_PUBLIC_REGISTRY }}
+        ecr=${{ inputs.ecr-registry }}
         echo "ecr-rc-image=${ecr}aleph-node:${commit_sha}" >> $GITHUB_OUTPUT
         echo "ecr-deploy-image=${ecr}aleph-node:${commit_sha}" >> $GITHUB_OUTPUT
         echo "dockerhub-testnet-image=cardinalcryptography/aleph-zero:testnet-${commit_tag}" \
