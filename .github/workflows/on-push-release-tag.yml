@@ -16,6 +16,9 @@ jobs:
     # needs: [check-vars-and-secrets]
     runs-on: ubuntu-20.04
     steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+        
       - name: Get docker image names
         id: get-docker-image-names
         uses: ./.github/actions/get-docker-image-names
@@ -24,7 +27,7 @@ jobs:
       # fail, as there would be no aleph-node-<sha> image on ECR for <sha> that is not on main
       # or release branch, see on-main-or-release-branch-commit.yml
       - name: Check release candaidate docker image existence
-        uses: ./.github/check-image-existence-ecr
+        uses: ./.github/actions/check-image-existence-ecr
         with:
           ecr-image: ${{ steps.get-docker-image-names.outputs.ecr-rc-image }}
 
