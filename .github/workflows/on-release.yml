@@ -18,7 +18,7 @@ jobs:
     secrets: inherit
 
   add-runtime-and-binary-to-release:
-    needs: [check-vars-and-secrets]
+#    needs: [check-vars-and-secrets]
     name: Add runtime and binary to release
     runs-on: ubuntu-20.04
     steps:
