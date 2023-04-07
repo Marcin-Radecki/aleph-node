@@ -13,7 +13,7 @@ jobs:
     secrets: inherit
 
   push-ecr-image:
-    needs: [check-vars-and-secrets]
+    # needs: [check-vars-and-secrets]
     runs-on: ubuntu-20.04
     steps:
       - name: Get docker image names
