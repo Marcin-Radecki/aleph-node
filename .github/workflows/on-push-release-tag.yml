@@ -27,6 +27,15 @@ jobs:
           ecr-repo: ${{ vars.ECR_ALEPH_NODE_REPO }}
           dockerhub-repo: ${{ vars.DOCKERHUB_ALEPH_NODE_REPO }}
 
+      - name: Login to Public Amazon ECR
+        id: login-public-ecr
+        uses: docker/login-action@v2
+        with:
+          # TODO uncomment
+          # registry: ${{ vars.ECR_PUBLIC_HOST }}
+          username: ${{ secrets.AWS_MAINNET_ACCESS_KEY_ID }}
+          password: ${{ secrets.AWS_MAINNET_SECRET_ACCESS_KEY }}
+
       # if r-* tag was pushed on a commit that is not on main or release branch, below step would
       # fail, as there would be no aleph-node-<sha> image on ECR for <sha> that is not on main
       # or release branch, see on-main-or-release-branch-commit.yml
@@ -34,16 +43,6 @@ jobs:
         uses: ./.github/actions/check-image-existence-ecr
         with:
           ecr-image: ${{ steps.get-docker-image-names.outputs.ecr-rc-image }}
-          dockerhub-username: "${{ secrets.DOCKERHUB_USERNAME }}"
-          dockerhub-password: "${{ secrets.DOCKERHUB_PASSWORD }}"
-
-      - name: Login to Public Amazon ECR
-        id: login-public-ecr
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ vars.ECR_PUBLIC_HOST }}
-          username: ${{ secrets.AWS_MAINNET_ACCESS_KEY_ID }}
-          password: ${{ secrets.AWS_MAINNET_SECRET_ACCESS_KEY }}
 
       - name: Tag and push image to ECR
         shell: bash
