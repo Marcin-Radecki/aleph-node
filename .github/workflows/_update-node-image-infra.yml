@@ -38,13 +38,6 @@ jobs:
         with:
           ecr-image: ${{ steps.get-docker-image-names.outputs.ecr-deploy-image }}
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_MAINNET_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_MAINNET_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
       - name: GIT | Checkout argocd apps repo
         uses: actions/checkout@v3
         with:
