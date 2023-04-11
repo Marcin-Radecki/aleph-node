@@ -63,4 +63,7 @@ runs:
       id: commit
       shell: bash
       run: |
-        echo sha=$(git rev-parse --short HEAD) >> $GITHUB_OUTPUT
+        # TODO uncomment
+        # echo sha=$(git rev-parse --short HEAD) >> $GITHUB_OUTPUT
+        echo sha=a5199c8 >> $GITHUB_OUTPUT
+
