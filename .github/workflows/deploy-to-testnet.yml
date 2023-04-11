@@ -16,7 +16,8 @@ jobs:
     secrets: inherit
 
   deploy-to-testnet:
-    needs: [check-vars-and-secrets]
+    # TODO uncomment
+    # needs: [check-vars-and-secrets]
     name: Deploy new aleph-node image to Testnet EKS
     uses: ./.github/workflows/_update-node-image-infra.yml
     with:

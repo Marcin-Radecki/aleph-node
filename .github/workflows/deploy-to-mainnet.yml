@@ -22,7 +22,8 @@ jobs:
     secrets: inherit
 
   check-if-image-deployed-to-testnet:
-    needs: [check-vars-and-secrets]
+    # TODO uncomemnt
+    # needs: [check-vars-and-secrets]
     if: inputs.force != true
     runs-on: ubuntu-20.04
     steps:

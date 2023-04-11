@@ -18,7 +18,8 @@ jobs:
     secrets: inherit
 
   add-runtime-and-binary-to-release:
-    needs: [check-vars-and-secrets]
+    # TODO uncomment
+    # needs: [check-vars-and-secrets]
     name: Add runtime and binary to release
     runs-on: ubuntu-20.04
     steps:
@@ -34,8 +35,9 @@ jobs:
         env:
           AWS_REGION: us-east-1
         with:
-          aws-access-key-id: ${{ secrets.AWS_MAINNET_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_MAINNET_SECRET_ACCESS_KEY }}
+          # TODO replace original
+          aws-access-key-id: ${{ secrets.AWS_MAINNET_ACCESS_KEY_ID_2 }}
+          aws-secret-access-key: ${{ secrets.AWS_MAINNET_SECRET_ACCESS_KEY_2 }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Download release runtime from S3 bucket
