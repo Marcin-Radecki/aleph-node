@@ -49,7 +49,7 @@ jobs:
         with:
           ref: ${{ inputs.env }}
           # yamllint disable-line rule:line-length
-          repository: {{ steps.get-repo-owner.outputs.repo-owner }}/${{ secrets.REPO_ARGOCD_APPS_NAME }}
+          repository: ${{ steps.get-repo-owner.outputs.repo-owner }}/${{ secrets.REPO_ARGOCD_APPS_NAME }}
           token: ${{ secrets.CI_GH_TOKEN }}
           path: "${{ secrets.REPO_ARGOCD_APPS_NAME }}"
 
