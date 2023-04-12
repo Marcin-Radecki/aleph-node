@@ -24,7 +24,6 @@ jobs:
   check-if-image-deployed-to-testnet:
     # TODO uncomemnt
     # needs: [check-vars-and-secrets]
-    if: inputs.force != true
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout aleph-node sources
@@ -38,6 +37,7 @@ jobs:
           dockerhub-repo: ${{ vars.DOCKERHUB_ALEPH_NODE_REPO }}
 
       - name: Compare latest Testnet image with current image being deployed to Mainnet
+        if: inputs.force != true
         uses: ./.github/actions/compare-docker-image-digests
         with:
           docker-image-a:
