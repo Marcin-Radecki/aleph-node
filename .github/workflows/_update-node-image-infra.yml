@@ -38,11 +38,18 @@ jobs:
         with:
           ecr-image: ${{ steps.get-docker-image-names.outputs.ecr-deploy-image }}
 
+      - name: Get repo owner
+        id: get-repo-owner
+        shell: bash
+        run: |
+          echo "repo-owner=$GITHUB_REPOSITORY_OWNER" >> $GITHUB_OUTPUT
+
       - name: GIT | Checkout argocd apps repo
         uses: actions/checkout@v3
         with:
           ref: ${{ inputs.env }}
-          repository: $GITHUB_REPOSITORY_OWNER/${{ secrets.REPO_ARGOCD_APPS_NAME }}
+          # yamllint disable-line rule:line-length
+          repository: {{ steps.get-repo-owner.outputs.repo-owner }}/${{ secrets.REPO_ARGOCD_APPS_NAME }}
           token: ${{ secrets.CI_GH_TOKEN }}
           path: "${{ secrets.REPO_ARGOCD_APPS_NAME }}"
 
