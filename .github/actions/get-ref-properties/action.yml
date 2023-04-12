@@ -65,5 +65,5 @@ runs:
       run: |
         # TODO uncomment
         # echo sha=$(git rev-parse --short HEAD) >> $GITHUB_OUTPUT
-        echo sha=93106eb >> $GITHUB_OUTPUT
+        echo sha=00af437 >> $GITHUB_OUTPUT
 
