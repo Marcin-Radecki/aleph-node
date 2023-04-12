@@ -43,6 +43,15 @@ runs:
       id: get-ref-properties
       uses: ./.github/actions/get-ref-properties
 
+    - name: Check if tag push was a trigger
+      shell: bash
+      run: |
+        if [[ -z "${{ steps.get-ref-properties.outputs.tag }}" ]]; then
+          echo "Error: did you forgot to run this workflow from tag?"
+          echo "Instead, it was run from branch ${{ steps.get-ref-properties.outputs.branch }}"
+          exit 1
+        fi
+
     - name: Get node image names
       id: get-docker-image-names
       shell: bash
