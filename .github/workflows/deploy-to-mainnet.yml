@@ -54,6 +54,8 @@ jobs:
   deploy-to-mainnet:
     needs: [check-if-image-deployed-to-testnet]
     name: Deploy new aleph-node image to Mainnet EKS
+    environment:
+      name: mainnet
     uses: ./.github/workflows/_update-node-image-infra.yml
     with:
       env: mainnet
