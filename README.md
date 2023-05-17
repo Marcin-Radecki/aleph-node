@@ -13,6 +13,7 @@ Aleph node is based on a Substrate node where the default finality gadget (GRAND
 
 Please consult the [BUILD][build] guide.
 
+
 ### Running
 
 #### Connect to Aleph Zero Testnet
