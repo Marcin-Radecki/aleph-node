@@ -72,7 +72,7 @@ jobs:
   send-slack-notification-release:
     name: Send Slack notification about workflow status
     runs-on: ubuntu-20.04
-    if: startsWith(github.ref_name, 'release-')
+    if: always() && startsWith(github.ref_name, 'release-')
     needs: [push-node-image-to-ecr]
     steps:
       - name: Checkout repository
@@ -88,7 +88,7 @@ jobs:
   send-slack-notification-main:
     name: Send Slack notification about workflow status
     runs-on: ubuntu-20.04
-    if: github.ref_name == 'main'
+    if: always() && github.ref_name == 'main'
     needs: [ push-node-image-to-ecr ]
     steps:
       - name: Checkout repository
