@@ -36,12 +36,12 @@ jobs:
           # cut release candidate part of the tag
           tag=$(echo '${{ steps.get-ref-properties.outputs.tag }}' | sed 's/-rc.*$//g')
           # cut major version from Cargo.toml
-          expected_version=$(echo '${{ steps.read-node-version.outputs.value }}' | sed -e 's/^[0-9]\+\.//g')
-          if [[ ${tag} != ${expected_version} ]]; then
+          expected_tag=r-$(echo '${{ steps.read-node-version.outputs.value }}' | sed -e 's/^[0-9]\+\.//g')
+          if [[ ${tag} != ${expected_tag} ]]; then
             echo "Error: tag version does not match verison in bin/node/Cargo.toml"
             echo "Tag is ${{ steps.get-ref-properties.outputs.tag }}"
             echo "Non-release candidate part of the tag is ${tag}"
-            echo" Version in bin/node/Cargo.toml is ${expected_version}"
+            echo" Expected tag is ${expected_tag}."
             exit 1
           fi
 
