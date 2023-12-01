@@ -346,7 +346,7 @@ dependencies = [
 
 [[package]]
 name = "aleph-node"
-version = "0.13.0+dev"
+version = "0.100.0"
 dependencies = [
  "aleph-runtime",
  "finality-aleph",
