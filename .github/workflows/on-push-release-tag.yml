@@ -41,7 +41,7 @@ jobs:
             echo "Error: tag version does not match verison in bin/node/Cargo.toml"
             echo "Tag is ${{ steps.get-ref-properties.outputs.tag }}"
             echo "Non-release candidate part of the tag is ${tag}"
-            echo" Expected tag is ${expected_tag}."
+            echo "Expected tag is ${expected_tag}."
             exit 1
           fi
 
