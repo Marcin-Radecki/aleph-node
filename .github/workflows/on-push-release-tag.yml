@@ -41,7 +41,6 @@ jobs:
             echo "Error: tag version does not match version in bin/node/Cargo.toml"
             echo "Non-release candidate part of the tag is ${tag}"
             echo "Expected tag from node version is ${expected_tag}"
-            echo "Did you for
             exit 1
           fi
 
