@@ -41,6 +41,7 @@ jobs:
             echo "Tag is ${{ steps.get-ref-properties.outputs.tag }}"
             echo "Non-release candidate part of the tag is ${tag}"
             echo" Version in bin/node/Cargo.toml is ${expected_version}"
+            exit 1
           fi
 
   push-ecr-image:
