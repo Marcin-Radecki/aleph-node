@@ -28,7 +28,7 @@ jobs:
         uses: SebRollen/toml-action@v1.0.2
         with:
           file: 'bin/node/Cargo.toml'
-          field: 'version'
+          field: 'package.version'
 
       - name: Check if node version matches with tag
         shell: bash
