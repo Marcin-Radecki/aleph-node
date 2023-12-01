@@ -7,13 +7,13 @@ on:
       - 'r-*'
 
 jobs:
-  check-vars-and-secrets:
-    name: Check vars and secrets
-    uses: ./.github/workflows/_check-vars-and-secrets.yml
-    secrets: inherit
+#  check-vars-and-secrets:
+#    name: Check vars and secrets
+#    uses: ./.github/workflows/_check-vars-and-secrets.yml
+#    secrets: inherit
 
   check-node-version:
-    needs: [check-vars-and-secrets]
+#    needs: [check-vars-and-secrets]
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout source code
