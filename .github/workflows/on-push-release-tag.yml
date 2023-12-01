@@ -32,6 +32,7 @@ jobs:
 
       - name: Check if node version matches with tag
         shell: bash
+        # yamllint disable rule:line-length
         run: |
           # cut release candidate part of the tag
           tag=$(echo '${{ steps.get-ref-properties.outputs.tag }}' | sed 's/-rc.*$//g')
@@ -43,6 +44,7 @@ jobs:
             echo "Expected tag from node version is ${expected_tag}"
             exit 1
           fi
+        # yamllint enable rule:line-length
 
   push-ecr-image:
     needs: [check-node-version]
