@@ -23,7 +23,7 @@
         interval: "weekly"
         day: "sunday"
         # UTC time
-        time: "09:00"       
+        time: "14:12"       
       rebase-strategy: disabled   
       commit-message:
         prefix: "A0-3952: "
