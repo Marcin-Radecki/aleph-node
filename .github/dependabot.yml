@@ -11,9 +11,16 @@ updates:
     commit-message:
       prefix: "A0-3951: "
     groups:
-      all-rust-deps:
+      all-rust-deps-except-liminal:
         patterns:
           - "*"
+        exclude-patterns:
+          - "baby-liminal-extension*"
+          - "pallets/vk-storage*"
+      liminal-deps:
+        patterns:
+          - "baby-liminal-extension*"
+          - "pallets/vk-storage*"
     pull-request-branch-name:
       separator: "-"
     ignore:
