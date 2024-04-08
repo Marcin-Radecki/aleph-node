@@ -6,7 +6,7 @@ updates:
     schedule:
       interval: daily
       # UTC time
-      time: "06:00"
+      time: "09:42"
     rebase-strategy: disabled
     commit-message:
       prefix: "A0-3951: "
