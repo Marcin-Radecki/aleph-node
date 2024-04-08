@@ -12,8 +12,6 @@ updates:
       prefix: "A0-3951: "
     groups:
       all-rust-deps-except-liminal:
-        patterns:
-          - "*"
         exclude-patterns:
           - "baby-liminal-extension*"
           - "pallets/vk-storage*"
